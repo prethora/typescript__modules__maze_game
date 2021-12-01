@@ -1,0 +1,29 @@
+div.block
+{	
+	--border-width: 2px;
+	--border-color: #000;
+	--background-color: white;
+	background-color: var(--background-color);
+	border-left: var(--border-width) solid var(--background-color);
+	border-top: var(--border-width) solid var(--background-color);
+}
+
+div.block.left
+{
+	border-left: var(--border-width) solid var(--border-color);
+}
+
+div.block.right
+{
+	border-right: var(--border-width) solid var(--border-color);
+}
+
+div.block.top
+{
+	border-top: var(--border-width) solid var(--border-color);
+}
+
+div.block.bottom
+{
+	border-bottom: var(--border-width) solid var(--border-color);
+}
