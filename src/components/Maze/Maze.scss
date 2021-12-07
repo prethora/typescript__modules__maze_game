@@ -1,11 +1,67 @@
+div.frame.show
+{
+	visibility: visible;
+	opacity: 1;
+}
+
+div:global(.durationSwitch) div.frame
+{
+	--duration: 0.7s;
+}
+
+div.frame
+{
+	--duration: 1.2s;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility var(--duration),opacity var(--duration);
+
+	display: flex;
+	flex-direction: row;	
+}
+
+body div:global(.dark) .player
+{
+	background-color: white;
+}
+
 div.maze
 {
-	--size: 26px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: calc((var(--size) + 2px) * 20 / -2);
-	margin-top: calc((var(--size) + 2px) * 20 / -2);
+	position: relative;
+	border: 2px solid #FFF;
+	
+	.player
+	{
+		--size: 26px;
+		position: absolute;
+		--margin-ratio: 0.23;
+		margin-left: calc(var(--size) * 0.23);
+		margin-top: calc(var(--size) * 0.25);
+		--ratio: 0.68;
+		width: calc(var(--size) * var(--ratio));
+		height: calc(var(--size) * var(--ratio));
+		border-radius: var(--size);
+		background-color: black;
+		
+		opacity: 1;
+		--duration: 0.15s;
+		transition: left var(--duration),top var(--duration),opacity var(--duration);
+	}
+
+	.player.hide
+	{
+		opacity: 0;		
+	}
+
+	.player.slow
+	{
+		--duration: 0.45s;
+	}
+
+	.player.instant
+	{
+		transition: none;
+	}
 }
 
 div.row

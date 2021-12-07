@@ -1,4 +1,7 @@
-import * as React from "react";
-export declare class App extends React.Component<{}, {}> {
-    render(): JSX.Element;
-}
+import "./resources/fonts/stylesheet.css";
+import "./resources/fonts/fontello/css/fontello.css";
+export declare type Coor = {
+    y: number;
+    x: number;
+};
+export declare function App(): JSX.Element;

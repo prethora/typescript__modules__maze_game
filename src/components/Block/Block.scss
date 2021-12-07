@@ -1,29 +1,142 @@
+body div:global(.dark) div.block
+{
+	--border-color: #FFF;
+	--background-color: black;
+	--fog-background-color: black;
+
+	.topOpening
+	{
+		display: block;
+	}
+
+	.bottomOpening
+	{
+		display: block;
+	}
+}
+
 div.block
 {	
 	--border-width: 2px;
+
 	--border-color: #000;
 	--background-color: white;
+	--fog-background-color: black;
+	
+	--edge-border-color: transparent;
+	--left-border-color: var(--border-color);
+	--top-border-color: var(--border-color);
+	--right-border-color: var(--border-color);
+	--bottom-border-color: var(--border-color);
 	background-color: var(--background-color);
 	border-left: var(--border-width) solid var(--background-color);
 	border-top: var(--border-width) solid var(--background-color);
+	position: relative;
+
+	.topOpening	
+	{
+		position: absolute;
+		width: calc(100% + 2px);
+		height: var(--border-width);
+		top: -4px;
+		left: -2px;
+		background-color: #000;
+		display: none;
+	}
+
+	.bottomOpening	
+	{
+		position: absolute;
+		width: calc(100% + 2px);
+		height: var(--border-width);
+		bottom: -4px;
+		left: 0px;
+		background-color: #000;
+		display: none;
+	}
+
+	.fog
+	{
+		position: absolute;
+		left: -2px;
+		top: -2px;
+		width: 100%;
+		height: 100%;
+		background-color: var(--fog-background-color);
+		border-left: var(--border-width) solid var(--fog-background-color);
+		border-top: var(--border-width) solid var(--fog-background-color);
+		z-index: 10;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.15s,visibility 0.15s;
+	}
+}
+
+div.block.edgeLeft
+{
+	--left-border-color: var(--edge-border-color);
+}
+
+div.block.edgeTop
+{
+	--top-border-color: var(--edge-border-color);
+}
+
+div.block.edgeRight
+{
+	--right-border-color: var(--edge-border-color);
+}
+
+div.block.edgeBottom
+{
+	--bottom-border-color: var(--edge-border-color);
+}
+
+div.block.fogged 
+{
+	.fog
+	{
+		opacity: 1;
+		visibility: visible;	
+	}
+
+	.topOpening	
+	{
+		display: block;
+	}
+
+	.bottomOpening
+	{
+		display: block;
+	}
+}
+
+div.block.fogRight .fog
+{
+	border-right: var(--border-width) solid var(--fog-background-color);
+}
+
+div.block.fogBottom .fog
+{
+	border-bottom: var(--border-width) solid var(--fog-background-color);
 }
 
 div.block.left
 {
-	border-left: var(--border-width) solid var(--border-color);
+	border-left: var(--border-width) solid var(--left-border-color);
 }
 
 div.block.right
 {
-	border-right: var(--border-width) solid var(--border-color);
+	border-right: var(--border-width) solid var(--right-border-color);
 }
 
 div.block.top
 {
-	border-top: var(--border-width) solid var(--border-color);
+	border-top: var(--border-width) solid var(--top-border-color);
 }
 
 div.block.bottom
 {
-	border-bottom: var(--border-width) solid var(--border-color);
+	border-bottom: var(--border-width) solid var(--bottom-border-color);
 }

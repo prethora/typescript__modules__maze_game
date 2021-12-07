@@ -1,7 +1,13 @@
 declare namespace MazeScssNamespace {
   export interface IMazeScss {
+    frame: string;
+    hide: string;
+    instant: string;
     maze: string;
+    player: string;
     row: string;
+    show: string;
+    slow: string;
   }
 }
 

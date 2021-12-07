@@ -1,0 +1,80 @@
+div.container.gameOver
+{
+	div.row.wins
+	{
+		color: yellow;
+	}	
+}
+
+div.container.flash
+{
+	div.row.steps
+	{
+		color: red;
+	}
+}
+
+div.container
+{
+	padding-left: 25px;
+	width: 150px;
+	color: #FFF;
+
+	div.row.steps
+	{
+		transition: color 0.5s;
+	}
+
+	div.row
+	{
+		margin-bottom: 15px;
+		display: flex;
+		flex-direction: row;
+
+		.icon
+		{
+			padding-top: 3px;
+			width: 55px;
+			height: 28px;
+			overflow: hidden;
+		}
+
+		.counter
+		{
+			font-size: 24px;
+			font-family: Retro Gaming;		
+		}
+	}
+
+	.sep
+	{
+		height: 30px;
+	}
+}
+
+img.lantern
+{
+	height: 22px;
+}
+
+i.stairs
+{
+	font-size: 76px;
+	position: relative;
+	left: -11px;
+	top: -3px;
+}
+
+i.cup
+{
+	font-size: 24px;
+	position: relative;
+	left: 0px;
+	top: -1px;
+}
+
+img.lantern
+{
+	position: relative;
+	left: 8px;
+}

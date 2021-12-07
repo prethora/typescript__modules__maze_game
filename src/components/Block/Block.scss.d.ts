@@ -2,9 +2,19 @@ declare namespace BlockScssNamespace {
   export interface IBlockScss {
     block: string;
     bottom: string;
+    bottomOpening: string;
+    edgeBottom: string;
+    edgeLeft: string;
+    edgeRight: string;
+    edgeTop: string;
+    fog: string;
+    fogBottom: string;
+    fogRight: string;
+    fogged: string;
     left: string;
     right: string;
     top: string;
+    topOpening: string;
   }
 }
 

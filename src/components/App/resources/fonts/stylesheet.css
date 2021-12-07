@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Retro Gaming';
+    src: url('RetroGaming.eot');
+    src: url('RetroGaming.eot?#iefix') format('embedded-opentype'),
+        url('RetroGaming.woff2') format('woff2'),
+        url('RetroGaming.woff') format('woff'),
+        url('RetroGaming.ttf') format('truetype'),
+        url('RetroGaming.svg#RetroGaming') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
