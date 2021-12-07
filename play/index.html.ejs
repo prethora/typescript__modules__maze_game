@@ -7,13 +7,130 @@
       window.mazeConfig = {
           playerVisibilityRadius: 3,
           lanternVisibilityRadius: 5,
-          // stepsPerMaze: 150,
-          stepsPerMaze: 5,
+          stepsPerMaze: 150,
           lanternsPerMaze: 2
       };
+    </script>
+
+    <style>
+      #loading
+      {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;        
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        opacity: 1;
+        visibility: visible;
+        --duration: 0.5s;
+        transition: opacity var(--duration),visibility var(--duration);
+      }
+
+      #loading.hide
+      {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      :root
+      {
+        --loading-box-size: 100px;
+      }
+
+      #loading .frameh
+      {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        height: var(--loading-box-size);
+        width: 100%;        
+      }
+
+      #loading .box
+      {
+        height: 100%;
+        width: var(--loading-box-size);
+        position: relative;
+      }
+
+      #loading .mover
+      {
+        --size: calc(var(--loading-box-size) / 2); 
+        width: var(--size);
+        height: var(--size);
+        border-radius: var(--size);
+        background-color: white;
+        position: absolute;
+        left: 0%;
+        top: 0%;
+        --duration: 0.5s;
+        transition: left var(--duration),top var(--duration);
+      }
+    </style>
+    <script>
+      window.__loader = {
+        pnt: 0,
+        ended: false,
+        positions: [
+            {left: "0%",top: "0%"},
+            {left: "50%",top: "0%"},
+            {left: "50%",top: "50%"},
+            {left: "0%",top: "50%"}
+        ],
+        startAnimation: function()
+        {
+          this.setNextState();
+        },
+        setNextState: function()
+        {
+          if (this.ended) return;
+          this.pnt = (this.pnt+1)%this.positions.length;
+          const newPosition = this.positions[this.pnt];
+          var mover = document.querySelector("#loading .mover");
+          mover.style.left = newPosition.left;
+          mover.style.top = newPosition.top;
+        },
+        endAnimation: function(cb)
+        {
+          if (this.ended) return;
+          this.ended = true;
+          const loadingElem = document.getElementById("loading");
+          loadingElem.addEventListener("transitionend",(e) => 
+          {
+            if ((e.target===loadingElem) && (e.propertyName==="opacity"))
+            {
+              if (cb) cb();
+            }
+          });
+          loadingElem.classList.add("hide");
+        }
+      };
+      window.addEventListener("load",() => 
+      {
+        var moverElem = document.querySelector("#loading .mover");
+        moverElem.addEventListener("transitionend",(e) => 
+        {
+          if (e.target===moverElem)
+          {
+            window.__loader.setNextState();
+          }
+        });
+        window.__loader.startAnimation();
+      });
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <div id="loading">
+      <div class="frameh">
+        <div class="box">
+          <div class="mover"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

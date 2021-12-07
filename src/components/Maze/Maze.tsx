@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState,useEffect,useRef } from "react";
 import { Coor, TMaze } from "../../lib/generate_maze";
 import { genIndexes, getParameterByName } from "../../lib/misc";
+import { TFadeState } from "../App/App";
 import { Block } from "../Block/Block";
 import { Lantern } from "../Lantern/Lantern";
 import { Stats } from "../Stats/Stats";
@@ -53,7 +54,7 @@ export function Maze({
     const [instant,setInstant] = useState(false);    
     const [gameOver,setGameOver] = useState(false);    
     const [gameOverFlash,setGameOverFlash] = useState(false);
-    const perm = useRef({pos,vertSep,horiSep,stepsLeft,wins,lanterns,lanternsLeft,gameOver,gameOverFlash,backToStartCalled: false,isFadedIn: false});
+    const perm = useRef({pos,vertSep,horiSep,stepsLeft,wins,lanterns,lanternsLeft,gameOver,gameOverFlash,backToStartCalled: false,show});
     perm.current.pos = pos;
     perm.current.vertSep = vertSep;
     perm.current.horiSep = horiSep;
@@ -62,7 +63,10 @@ export function Maze({
     perm.current.lanterns = lanterns;    
     perm.current.lanternsLeft = lanternsLeft;       
     perm.current.gameOver = gameOver;           
-    perm.current.gameOverFlash = gameOverFlash;
+    perm.current.gameOverFlash = gameOverFlash;    
+    perm.current.show = show;        
+
+    const fadeStateRef = useRef<TFadeState>("HIDDEN");
 
     const playerRef = useRef<HTMLDivElement>(null);
 
@@ -75,6 +79,7 @@ export function Maze({
     const doGameOver = () => 
     {
         setGameOver(true);        
+        gameOverFlashCounterRef.current = 0;
     };
 
     const consumeStep = () => 
@@ -124,26 +129,23 @@ export function Maze({
     useEffect(() =>
     {
         window.addEventListener("keydown",(e) => 
-        {
-            console.log("YO 1");
+        {            
             if (perm.current.gameOver) 
             {
-                console.log("YO 2");
-                if (!perm.current.backToStartCalled)
+                const arrowKeys = ["ArrowRight","ArrowLeft","ArrowUp","ArrowDown"];
+                if (arrowKeys.indexOf(e.key)===-1)
                 {
-                    console.log("YO 3");
-                    gameOverFlashCounterRef.current = -1;                    
-                    perm.current.backToStartCalled = true;
-                    onBackToStart();
+                    if (!perm.current.backToStartCalled)
+                    {
+                        gameOverFlashCounterRef.current = -1;                    
+                        perm.current.backToStartCalled = true;
+                        onBackToStart();
+                    }                    
                 }
                 return;
             }
 
-            console.log("YO 4");
-
-            if (!perm.current.isFadedIn) return;
-
-            console.log("YO 5");
+            if ((fadeStateRef.current=="FADING-OUT") || (fadeStateRef.current=="HIDDEN")) return;
 
             const {x,y} = perm.current.pos;
             const { vertSep,horiSep } = perm.current;
@@ -208,7 +210,6 @@ export function Maze({
                         const { x,y } = perm.current.pos;
                         if ((x===0) && (y===0))
                         {
-                            console.log("CALLED 2");
                             setSlow(false);
                         }
                     }    
@@ -263,19 +264,33 @@ export function Maze({
     {
         if (refFrame.current)
         {
+            refFrame.current.addEventListener("transitionstart",(e) => 
+            {
+                if ((e.target===refFrame.current) && (e.propertyName==="opacity"))
+                {
+                    if (perm.current.show)
+                    {
+                        fadeStateRef.current = "FADING-IN";
+                    }
+                    else
+                    {
+                        fadeStateRef.current = "FADING-OUT";
+                    }
+                }
+            });
             refFrame.current.addEventListener("transitionend",(e) => 
             {                                
                 if ((e.target===refFrame.current) && (e.propertyName==="opacity"))
                 {
                     if (getComputedStyle(refFrame.current!).opacity==="0")
                     {
-                        perm.current.isFadedIn = false;
+                        fadeStateRef.current = "HIDDEN";
                         setGameOver(false);
                         onFadedOut();
                     }
                     else
                     {
-                        perm.current.isFadedIn = true;
+                        fadeStateRef.current = "VISIBLE";
                     }                    
                 }
             });
@@ -298,7 +313,6 @@ export function Maze({
 
     const gameOverOverlayFadedInHandler = () => 
     {
-        gameOverFlashCounterRef.current = 0;
         setGameOverFlash(true);
     };
 

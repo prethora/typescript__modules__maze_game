@@ -5,6 +5,7 @@ declare namespace StatsScssNamespace {
     cup: string;
     flash: string;
     gameOver: string;
+    hiddenImage: string;
     icon: string;
     lantern: string;
     row: string;

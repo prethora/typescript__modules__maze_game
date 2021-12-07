@@ -10,7 +10,7 @@ div.container.flash
 {
 	div.row.steps
 	{
-		color: red;
+		color: #999;
 	}
 }
 
@@ -77,4 +77,10 @@ img.lantern
 {
 	position: relative;
 	left: 8px;
+}
+
+img.hiddenImage
+{
+	visibility: hidden;
+	height: 1px;
 }

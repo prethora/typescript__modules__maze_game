@@ -14,8 +14,9 @@ interface TProp
 export function StartScreen({show,onFadedOut,onFadedIn,onStartedFadeIn,onStartedFadeOut}: TProp)
 {
     const [flash,setFlash] = useState(false);
-    const perm = useRef({flash});
+    const perm = useRef({flash,show});
     perm.current.flash = flash;
+    perm.current.show = show;
 
     const fsy = [styles.frame];
     if (show) fsy.push(styles.show);
@@ -45,8 +46,7 @@ export function StartScreen({show,onFadedOut,onFadedIn,onStartedFadeIn,onStarted
             {
                 if ((e.target===refFrame.current) && (e.propertyName==="opacity"))
                 {
-                    const opacity = parseFloat(getComputedStyle(refFrame.current!).opacity);
-                    if (opacity<0.5)
+                    if (perm.current.show)
                     {
                         if (onStartedFadeIn) onStartedFadeIn();
                     }

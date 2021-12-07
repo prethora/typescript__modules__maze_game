@@ -9,9 +9,12 @@ import "./resources/fonts/stylesheet.css";
 import "./resources/fonts/fontello/css/fontello.css";
 import { StartScreen } from "../StartScreen/StartScreen";
 import { mazeConfig } from "../../lib/config";
+import { startupEvents } from "../../lib/startup_events";
 
 export type Coor = {y: number,x: number};
 type TGameState = "STARTSCREEN" | "MAZE" | "GAMEOVER" | "BLANK";
+
+export type TFadeState = "VISIBLE" | "HIDDEN" | "FADING-IN" | "FADING-OUT";
 
 export function App()
 {
@@ -24,16 +27,16 @@ export function App()
         lanternsPerMaze 
     } = mazeConfig;
     
-    const [gameState,setGameState] = useState<TGameState>("STARTSCREEN");    
-
-    console.log("gameState",gameState);
+    const [gameState,setGameState] = useState<TGameState>("BLANK");
 
     const [gameNumber,setGameNumber] = useState(0);
     const [maze,setMaze] = useState(generateMaze(width,height));
-    const [durationSwitched,setDurationSwitched] = useState(false);
-    const perm = useRef({gameState,gameNumber,startScreenIsFadedIn: true});
+    const [durationSwitched,setDurationSwitched] = useState(true);
+    const perm = useRef({gameState,gameNumber});
     perm.current.gameState = gameState;
     perm.current.gameNumber = gameNumber;    
+
+    const startScreenFadeStateRef = useRef<TFadeState>("HIDDEN");
     
     const restartHandler = () => 
     {
@@ -44,31 +47,65 @@ export function App()
     {
         window.addEventListener("keydown",(e) => 
         {
-            console.log("BO 1");
             const { gameState } = perm.current;
-            if ((gameState==="STARTSCREEN") && (perm.current.startScreenIsFadedIn))
+            if ((gameState==="STARTSCREEN") && ((startScreenFadeStateRef.current==="FADING-IN") || (startScreenFadeStateRef.current==="VISIBLE")))
             {
-                console.log("BO 2");
                 setDurationSwitched(false);
-                perm.current.startScreenIsFadedIn = false;
+                startScreenFadeStateRef.current = "FADING-OUT";
                 setGameState("BLANK");
             }
         });
+
+        startupEvents.registerCallback(() => 
+        {
+            const _window: any = window;
+            _window.__loader.endAnimation(() => 
+            {
+                setGameState("STARTSCREEN");
+            });
+        });
+
+        setTimeout(() => 
+        {
+            startupEvents.registerEvent();
+        },2000);
+
+        if (document.fonts)
+        {
+            document.fonts.ready.then(function() 
+            {            
+                startupEvents.registerEvent();
+            });    
+        }
+        else
+        {
+            setTimeout(() => 
+            {
+                startupEvents.registerEvent();
+            },1500);
+        }
     },[]);
 
     const startScreenStartedFadedInHandler = () => 
     {
+        startScreenFadeStateRef.current = "FADING-IN";
+    };
 
+    const startScreenStartedFadedOutHandler = () => 
+    {
+        startScreenFadeStateRef.current = "FADING-OUT";
     };
 
     const startScreenFadedOutHandler = () => 
     {
-        setGameState("MAZE");
+        startScreenFadeStateRef.current = "HIDDEN";
+        setGameState("MAZE");        
     };
 
     const startScreenFadedInHandler = () => 
     {
-        perm.current.startScreenIsFadedIn = true;
+        startScreenFadeStateRef.current = "VISIBLE";
+        setDurationSwitched(false);
     };
 
     const mazeFadedOutHandler = () => 
@@ -110,6 +147,7 @@ export function App()
                 onFadedOut={startScreenFadedOutHandler}
                 onFadedIn={startScreenFadedInHandler}
                 onStartedFadeIn={startScreenStartedFadedInHandler}
+                onStartedFadeOut={startScreenStartedFadedOutHandler}                
             />
         </div>
     );

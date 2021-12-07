@@ -1,8 +1,10 @@
 import * as React from "react";
 import { useState,useEffect,useRef } from "react";
 import styles from "./Stats.scss";
-import stairSrc from "./resources/stairs.svg";
 import lanternSrc from "./resources/lantern.svg";
+import mazeLanternBlackSrc from "../Lantern/resources/lantern.svg";
+import mazeLanternWhiteSrc from "../Lantern/resources/lantern-white.svg";
+import { startupEvents } from "../../lib/startup_events";
 
 interface TProp
 {
@@ -20,6 +22,11 @@ export function Stats({stepsLeft,wins,lanternsLeft,lanternsPerMaze,gameOver,game
     if (gameOver) csy.push(styles.gameOver);
     if (gameOverFlash) csy.push(styles.flash);
 
+    const lanternLoadHandler = () => 
+    {
+        startupEvents.registerEvent();
+    };
+
     return (
         <div className={csy.join(" ")}>
             <div className={styles.row+" "+styles.steps}>
@@ -32,7 +39,7 @@ export function Stats({stepsLeft,wins,lanternsLeft,lanternsPerMaze,gameOver,game
             </div>
             <div className={styles.row}>
                 <div className={styles.icon}>
-                    <img src={lanternSrc} className={styles.lantern} />
+                    <img src={lanternSrc} className={styles.lantern} onLoad={lanternLoadHandler} />
                 </div>
                 <div className={styles.counter}>
                     {lanternsLeft}/{lanternsPerMaze}
@@ -46,6 +53,10 @@ export function Stats({stepsLeft,wins,lanternsLeft,lanternsPerMaze,gameOver,game
                 <div className={styles.counter}>
                     {wins}
                 </div>                
+            </div>
+            <div>
+                <img className={styles.hiddenImage} src={mazeLanternBlackSrc} onLoad={lanternLoadHandler} />
+                <img className={styles.hiddenImage} src={mazeLanternWhiteSrc} onLoad={lanternLoadHandler} />
             </div>            
         </div>
     );

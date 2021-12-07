@@ -19,7 +19,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Playground',
       inject: true,
-      template: "./play/index.html.ejs"
+      template: "./play/index.html.ejs",
+      favicon: "./resources/favicon.ico"
     }),
     isDevelopment && new ForkTsCheckerWebpackPlugin(),
     isDevelopment && new ReactRefreshWebpackPlugin({
@@ -27,7 +28,7 @@ module.exports = {
     })
   ].filter(Boolean),
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[contenthash].bundle.js',
     path: path.resolve(__dirname,"dist"),
     clean: true
   },

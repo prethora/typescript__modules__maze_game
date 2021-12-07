@@ -122,29 +122,3 @@ export const generateMaze = (width: number,height: number): TMaze =>
         if ((res.pathLength>=lower) && (res.pathLength<=higher)) return res;
     }
 };
-
-// const analyze = () => 
-// {
-//     const mazeSize = 20;
-//     const data : {[count: string]: number} = {};
-//     const times = 10000;
-//     for(let t=0;t<times;t++)
-//     {
-//         const { pathLength } = generateMaze(mazeSize,mazeSize);
-//         data[pathLength] = data[pathLength] || 0;
-//         data[pathLength]++;
-//     }
-//     console.log(data);
-//     let cnt = 0;
-//     let tot = 0;
-//     Object.keys(data).forEach((_ts) => 
-//     {
-//         const ts = parseInt(_ts);
-//         cnt+= data[_ts];
-//         tot+= ts*data[_ts];
-//     });
-//     console.log(Math.round(tot/cnt));
-// };
-
-// const _window: any = window;
-// _window.analyze = analyze;
