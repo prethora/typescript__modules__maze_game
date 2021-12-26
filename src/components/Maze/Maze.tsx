@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState,useEffect,useRef } from "react";
+import { mazeConfig } from "../../lib/config";
 import { Coor, TMaze } from "../../lib/generate_maze";
 import { genIndexes, getParameterByName } from "../../lib/misc";
 import { TFadeState } from "../App/App";
@@ -318,7 +319,7 @@ export function Maze({
 
     const gameOverFlashCounterRef = useRef(0);
 
-    const gameOverFlashes = 3;
+    const gameOverFlashes = mazeConfig.gameOverFlashCount;
 
     const gameOverOverlayTextFadedEitherHandler = () => 
     {
@@ -338,7 +339,7 @@ export function Maze({
         }
         else
         {
-            if (gameOverFlashCounterRef.current<gameOverFlashes)
+            if ((gameOverFlashCounterRef.current<gameOverFlashes) || (gameOverFlashes===-1))
             {
                 next();
             }

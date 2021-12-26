@@ -3,5 +3,6 @@ export interface TMazeConfig {
     lanternVisibilityRadius: number;
     stepsPerMaze: number;
     lanternsPerMaze: number;
+    gameOverFlashCount: number;
 }
 export declare const mazeConfig: TMazeConfig;

@@ -4,6 +4,7 @@ export interface TMazeConfig
     lanternVisibilityRadius: number;
     stepsPerMaze: number;
     lanternsPerMaze: number;
+    gameOverFlashCount: number;
 };
 
 const _window = window as any;

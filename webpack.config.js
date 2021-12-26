@@ -4,12 +4,23 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshTypescript = require("react-refresh-typescript");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   mode: isDevelopment?"development":"production",
-  entry: "./play/index",
+  optimization: {
+    minimize: false,
+  },
+  // entry: "./play/index",
+  entry: {
+    main: {
+      import: "./play/index",
+      dependOn: "react"
+    },
+    react: ["react","react-dom"]
+  },
   devtool: isDevelopment?'inline-source-map':'source-map',
   devServer: {
     static: './dist',
@@ -21,6 +32,9 @@ module.exports = {
       inject: true,
       template: "./play/index.html.ejs",
       favicon: "./resources/favicon.ico"
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
     }),
     isDevelopment && new ForkTsCheckerWebpackPlugin(),
     isDevelopment && new ReactRefreshWebpackPlugin({
@@ -36,12 +50,12 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(scss|sass)$/,        
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader, 
           '@teamsupercell/typings-for-css-modules-loader',
           {
             loader: 'css-loader',
@@ -54,7 +68,15 @@ module.exports = {
               },
             }
           },
-          'sass-loader'],
+          {
+            loader: 'sass-loader',
+            options: {
+                sassOptions: {
+                  outputStyle: 'expanded'
+                }
+            }
+          }
+        ],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
