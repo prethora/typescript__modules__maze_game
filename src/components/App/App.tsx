@@ -18,8 +18,11 @@ export type TFadeState = "VISIBLE" | "HIDDEN" | "FADING-IN" | "FADING-OUT";
 
 export function App()
 {
+    // The maze dimensions are hard coded here    
     const width = 20;
     const height = 20;
+
+    // Loading the
     const { 
         playerVisibilityRadius,
         lanternVisibilityRadius,

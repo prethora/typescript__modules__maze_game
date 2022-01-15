@@ -10,7 +10,8 @@
     "declaration": true,
     "jsx": "react",
     "types": ["jest"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false
   },
   "include": [
     "src/**/*.ts",
